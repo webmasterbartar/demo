@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place 3D Model Anywhere</title>
+    <title>Place 3D Model on Surface</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs='trackingMethod: best; sourceType: webcam; debugUIEnabled: false;'>
-        <!-- Bind click event to place model -->
+        <!-- Bind click event to place model on surface -->
         <a-entity id="rig" position="0 0 0">
             <a-camera id="camera" look-controls="enabled: false"></a-camera>
         </a-entity>
 
-        <!-- Invisible plane to detect touch/click on the ground -->
-        <a-plane position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#FFF" material="opacity: 0.1; transparent: true" class="clickable"></a-plane>
-
         <!-- 3D Model -->
         <a-entity id="model" gltf-model="url(8.gltf)" scale="0.05 0.05 0.05" position="0 0 -5"></a-entity>
+
+        <!-- Event listener for surface detection -->
+        <a-plane position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#FFF" material="opacity: 0.1; transparent: true" class="clickable"></a-plane>
+
+        <!-- Surface detection cursor -->
+        <a-ring id="cursor" radius-inner="0.02" radius-outer="0.03" position="0 0 -3" color="red" visible="false"></a-ring>
     </a-scene>
 
     <script>
         const sceneEl = document.querySelector('a-scene');
+        const cursorEl = document.getElementById('cursor');
+        const modelEl = document.getElementById('model');
+
+        // Event listener for surface detection
         sceneEl.addEventListener('click', function (evt) {
-            const touchPoint = evt.detail.intersection.point;
-            const model = document.getElementById('model');
-            model.setAttribute('position', touchPoint);
+            const intersection = evt.detail.intersection;
+            if (intersection) {
+                cursorEl.setAttribute('visible', 'true');
+                cursorEl.setAttribute('position', intersection.point);
+                modelEl.setAttribute('position', intersection.point);
+            }
         });
     </script>
 </body>
