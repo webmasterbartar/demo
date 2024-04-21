@@ -15,7 +15,7 @@
         </a-entity>
 
         <!-- Invisible plane to detect touch/click on the ground -->
-        <a-plane position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#FFF" material="opacity: 0.0; transparent: true" class="clickable" event-set__1="_event: click; scale: 1 1 1" event-set__2="_event: click; _target: #model; position: ${position}"></a-plane>
+        <a-plane position="0 0 0" rotation="-90 0 0" width="100" height="100" color="#FFF" material="opacity: 0.1; transparent: true" class="clickable"></a-plane>
 
         <!-- 3D Model -->
         <a-entity id="model" gltf-model="url(8.gltf)" scale="0.05 0.05 0.05" position="0 0 -5"></a-entity>
@@ -23,11 +23,9 @@
 
     <script>
         const sceneEl = document.querySelector('a-scene');
-        const model = document.getElementById('model');
-        const camera = document.getElementById('camera');
-
         sceneEl.addEventListener('click', function (evt) {
             const touchPoint = evt.detail.intersection.point;
+            const model = document.getElementById('model');
             model.setAttribute('position', touchPoint);
         });
     </script>
